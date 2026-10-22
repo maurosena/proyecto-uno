@@ -4,15 +4,18 @@ namespace App\Http\Controllers;
 
 use App\Models\Provider;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 class ProviderController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(): View
     {
-        return view('providers.index');
+        $providers = Provider::withCount('products')->latest()->paginate(10);
+
+        return view('providers.index', compact('providers'));
     }
 
     /**

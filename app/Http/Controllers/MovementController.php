@@ -1,9 +1,11 @@
 <?php
 
 namespace App\Http\Controllers;
-use App\Models\Product;
+
 use App\Models\Movement;
+use App\Models\Product;
 use App\Notifications\StockProduct;
+use App\Support\InventoryRules;
 use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -13,12 +15,15 @@ use Illuminate\Support\Facades\Session;
 
 class MovementController extends Controller
 {
+    public function __construct(private InventoryRules $rules) {}
+
     /**
      * Display a listing of the resource.
      */
     public function index()
     {
         $movements = Movement::simplePaginate(10);
+
         return view('movements.index', ['movements' => $movements]);
     }
 
@@ -28,13 +33,14 @@ class MovementController extends Controller
     public function create()
     {
         $products = Product::orderBy('name', 'asc')->get();
+
         return view('movements.create', [
             'products' => $products,
             'movements_type' => [
                 Movement::MOVEMENT_TYPE_IN,
                 Movement::MOVEMENT_TYPE_DEVOLUTION,
-                Movement::MOVEMENT_TYPE_OUT
-            ]
+                Movement::MOVEMENT_TYPE_OUT,
+            ],
         ]);
     }
 
@@ -44,36 +50,40 @@ class MovementController extends Controller
     public function store(Request $request)
     {
         DB::beginTransaction();
-        $movement = new Movement();
-        $movement->type = $request->type;
-        $movement->amount = $request->amount;
-        $movement->sale_point = $request->sale_point;
-        $movement->product_id = $request->producto;
-        $movement->save();
 
-        $product = Product::find($request->producto);
         try {
-            switch($movement->type){
-                case Movement :: MOVEMENT_TYPE_IN:
-                case Movement :: MOVEMENT_TYPE_DEVOLUTION:
-                    $product->increment('amount', $movement->amount);
-                    break;
-                case Movement :: MOVEMENT_TYPE_OUT:
-                    if($product->amount < $movement->amount){
-                        throw new Exception("La cantidad solicitada es mayor a la cantidad de inventario");
-                    }
-                    $product -> decrement('amount', $movement->amount);
-                    break;
+            $movement = new Movement;
+            $movement->type = $request->type;
+            $movement->amount = $request->amount;
+            $movement->sale_point = $request->sale_point;
+            $movement->product_id = $request->producto;
+            $movement->save();
+
+            $product = Product::find($request->producto);
+
+            if (! $product instanceof Product) {
+                throw new Exception('El producto seleccionado no existe.');
             }
+
+            // Las reglas de inventario viven en App\Support\InventoryRules,
+            // una clase sin dependencias que se puede probar de forma aislada.
+            $product->amount = $this->rules->applyMovement(
+                $product->amount,
+                $movement->type,
+                $movement->amount
+            );
             $product->save();
+
             $this->checkLowStock($product);
+
+            // Solo se confirma la transacción si todo salió bien.
+            DB::commit();
         } catch (\Throwable $ex) {
-            Log::error('Error al tratar de realizar el movimiento');
-            Session::flash('error', $ex->getMessage());
             DB::rollBack();
+            Log::error('Error al tratar de realizar el movimiento: '.$ex->getMessage());
+            Session::flash('error', $ex->getMessage());
         }
 
-        DB::commit();
         return redirect()->route('movimientos.index');
     }
 
@@ -109,10 +119,11 @@ class MovementController extends Controller
         //
     }
 
-    private function checkLowStock($product){
-        if ($product->amount <= 10){
+    private function checkLowStock($product)
+    {
+        if ($product->amount <= 10) {
             Notification::route('mail', 'mvalenciaz@sena.edu.co')
-            ->notify(new StockProduct($product));
+                ->notify(new StockProduct($product));
         }
     }
 }

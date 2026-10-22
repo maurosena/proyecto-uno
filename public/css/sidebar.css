@@ -1,0 +1,731 @@
+@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+:root {
+    --sidebar-width: 270px;
+    --sidebar-collapsed-width: 80px;
+    --topbar-height: 66px;
+    --sidebar-bg: #0b1324;
+    --sidebar-surface: #111c35;
+    --sidebar-border: rgba(255, 255, 255, 0.08);
+    --sidebar-text: #94a3b8;
+    --sidebar-text-bright: #f8fafc;
+    --sidebar-hover-bg: rgba(255, 255, 255, 0.06);
+    --sidebar-active-bg: linear-gradient(90deg, rgba(59, 130, 246, 0.22) 0%, rgba(37, 99, 235, 0.08) 100%);
+    --sidebar-active-text: #60a5fa;
+    --sidebar-active-border: #3b82f6;
+    --primary-gradient: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    --accent-glow: 0 4px 20px -2px rgba(37, 99, 235, 0.4);
+    --content-bg: #f8fafc;
+
+    /* Safe Area Insets para iOS (Notch / Dynamic Island) y Android Cutout */
+    --safe-area-top: env(safe-area-inset-top, 0px);
+    --safe-area-right: env(safe-area-inset-right, 0px);
+    --safe-area-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-area-left: env(safe-area-inset-left, 0px);
+}
+
+/* ==========================================================================
+   RESET CROSS-PLATFORM (Windows, macOS, Linux, iOS, Android)
+   ========================================================================== */
+*, *::before, *::after {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+    -webkit-text-size-adjust: 100%;
+    -ms-text-size-adjust: 100%;
+    text-size-adjust: 100%;
+}
+
+body {
+    font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    background-color: var(--content-bg);
+    color: #1e293b;
+    min-height: 100vh;
+    min-height: -webkit-fill-available;
+    overflow-x: hidden;
+    max-width: 100vw;
+    line-height: 1.5;
+    
+    /* Suavizado de fuentes profesional en macOS / iOS / Linux */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+    
+    /* Eliminar destello azul táctil en Android / iOS */
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+}
+
+/* Scrollbar estilizada cross-platform (Windows & Linux Chromium + Firefox) */
+html {
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e1 #f1f5f9;
+}
+
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+::-webkit-scrollbar-track {
+    background: #f1f5f9;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #cbd5e1;
+    border-radius: 6px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #94a3b8;
+}
+
+/* ==========================================================================
+   SIDEBAR CONTENEDOR PRINCIPAL (Fijo a la Izquierda)
+   ========================================================================== */
+#sidebar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    bottom: 0;
+    width: var(--sidebar-width);
+    background-color: var(--sidebar-bg);
+    border-right: 1px solid var(--sidebar-border);
+    z-index: 1045;
+    display: flex;
+    flex-direction: column;
+    transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 4px 0 24px rgba(0, 0, 0, 0.12);
+    padding-top: var(--safe-area-top);
+    padding-bottom: var(--safe-area-bottom);
+    padding-left: var(--safe-area-left);
+}
+
+/* ==========================================================================
+   BRAND / LOGO
+   ========================================================================== */
+.sidebar-header {
+    height: var(--topbar-height);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.25rem;
+    border-bottom: 1px solid var(--sidebar-border);
+    background: rgba(11, 19, 36, 0.95);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+}
+
+.sidebar-brand {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    text-decoration: none;
+    color: var(--sidebar-text-bright);
+    overflow: hidden;
+}
+
+.brand-icon-box {
+    width: 42px;
+    height: 42px;
+    min-width: 42px;
+    border-radius: 12px;
+    background: var(--primary-gradient);
+    box-shadow: var(--accent-glow);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #ffffff;
+    font-size: 1.35rem;
+    transition: transform 0.25s ease;
+}
+
+.sidebar-brand:hover .brand-icon-box {
+    transform: scale(1.05) rotate(-3deg);
+}
+
+.brand-details {
+    display: flex;
+    flex-direction: column;
+    white-space: nowrap;
+    transition: opacity 0.2s ease;
+}
+
+.brand-title {
+    font-weight: 700;
+    font-size: 1.05rem;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+    line-height: 1.2;
+}
+
+.brand-badge {
+    font-size: 0.68rem;
+    font-weight: 600;
+    color: #93c5fd;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+}
+
+/* ==========================================================================
+   BOTÓN TOGGLE SIDEBAR
+   ========================================================================== */
+.sidebar-toggle-btn {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid var(--sidebar-border);
+    color: var(--sidebar-text);
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+.sidebar-toggle-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+    color: #ffffff;
+    transform: scale(1.05);
+}
+
+/* ==========================================================================
+   NAVEGACIÓN Y LINKS
+   ========================================================================== */
+.sidebar-body {
+    flex: 1;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+    padding: 1.25rem 0.85rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+}
+
+.sidebar-body::-webkit-scrollbar {
+    width: 5px;
+}
+.sidebar-body::-webkit-scrollbar-thumb {
+    background: rgba(255, 255, 255, 0.12);
+    border-radius: 4px;
+}
+
+.nav-section-title {
+    font-size: 0.68rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: #64748b;
+    padding: 0.8rem 0.75rem 0.4rem 0.75rem;
+    white-space: nowrap;
+    overflow: hidden;
+}
+
+.nav-item-link {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+    padding: 0.75rem 0.9rem;
+    color: var(--sidebar-text);
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 0.92rem;
+    border-radius: 10px;
+    position: relative;
+    transition: all 0.2s ease;
+    white-space: nowrap;
+}
+
+.nav-item-link:hover {
+    color: var(--sidebar-text-bright);
+    background-color: var(--sidebar-hover-bg);
+    transform: translateX(3px);
+}
+
+.nav-icon {
+    font-size: 1.25rem;
+    min-width: 26px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #94a3b8;
+    transition: color 0.2s ease, transform 0.2s ease;
+}
+
+.nav-item-link:hover .nav-icon {
+    color: #60a5fa;
+    transform: scale(1.1);
+}
+
+.nav-item-link.active {
+    background: var(--sidebar-active-bg);
+    color: #ffffff;
+    font-weight: 600;
+}
+
+.nav-item-link.active .nav-icon {
+    color: var(--sidebar-active-text);
+}
+
+.nav-item-link.active::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 15%;
+    bottom: 15%;
+    width: 4px;
+    border-radius: 0 4px 4px 0;
+    background-color: var(--sidebar-active-border);
+    box-shadow: 0 0 10px var(--sidebar-active-border);
+}
+
+.nav-pill-badge {
+    margin-left: auto;
+    font-size: 0.7rem;
+    padding: 0.2rem 0.55rem;
+    border-radius: 20px;
+    font-weight: 600;
+    background: rgba(59, 130, 246, 0.2);
+    color: #93c5fd;
+    border: 1px solid rgba(59, 130, 246, 0.3);
+}
+
+/* ==========================================================================
+   FOOTER DEL SIDEBAR
+   ========================================================================== */
+.sidebar-footer {
+    padding: 1rem;
+    border-top: 1px solid var(--sidebar-border);
+    background: var(--sidebar-surface);
+}
+
+.system-status-card {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.65rem 0.8rem;
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.status-indicator {
+    width: 10px;
+    height: 10px;
+    min-width: 10px;
+    border-radius: 50%;
+    background-color: #10b981;
+    position: relative;
+    box-shadow: 0 0 8px #10b981;
+}
+
+.status-indicator::after {
+    content: '';
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 1px solid rgba(16, 185, 129, 0.5);
+    animation: statusPulse 2s infinite;
+}
+
+@keyframes statusPulse {
+    0% { transform: scale(0.9); opacity: 1; }
+    100% { transform: scale(1.8); opacity: 0; }
+}
+
+.status-info {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.status-label {
+    font-size: 0.72rem;
+    color: #64748b;
+    font-weight: 500;
+}
+
+.status-name {
+    font-size: 0.8rem;
+    color: #e2e8f0;
+    font-weight: 600;
+}
+
+/* ==========================================================================
+   LAYOUT DEL CONTENIDO PRINCIPAL Y TOPBAR
+   ========================================================================== */
+#main-wrapper {
+    margin-left: var(--sidebar-width);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: margin-left 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    padding-right: var(--safe-area-right);
+}
+
+.topbar {
+    height: var(--topbar-height);
+    background: #ffffff;
+    border-bottom: 1px solid #e2e8f0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 1.5rem;
+    padding-top: var(--safe-area-top);
+    position: sticky;
+    top: 0;
+    z-index: 1030;
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+}
+
+.topbar-left {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    overflow: hidden;
+}
+
+.topbar-toggle-btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 38px;
+    height: 38px;
+    min-width: 38px;
+    border-radius: 8px;
+    border: 1px solid #e2e8f0;
+    background: #f8fafc;
+    color: #475569;
+    cursor: pointer;
+    font-size: 1.25rem;
+    transition: all 0.2s ease;
+}
+
+.topbar-toggle-btn:hover,
+.topbar-toggle-btn:active {
+    background: #e2e8f0;
+    color: #0f172a;
+}
+
+.topbar-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1e293b;
+    margin: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.topbar-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.65rem;
+    flex-shrink: 0;
+}
+
+.content-area {
+    flex: 1;
+    padding: 1.5rem;
+    padding-bottom: calc(1.5rem + var(--safe-area-bottom));
+    width: 100%;
+}
+
+@media (max-width: 576px) {
+    .content-area {
+        padding: 1rem 0.85rem;
+    }
+
+    .topbar {
+        padding: 0 0.85rem;
+    }
+}
+
+/* ==========================================================================
+   MODO COLAPSADO / MINIMIZADO (Desktop >= 992px)
+   ========================================================================== */
+body.sidebar-collapsed #sidebar {
+    width: var(--sidebar-collapsed-width);
+}
+
+body.sidebar-collapsed #main-wrapper {
+    margin-left: var(--sidebar-collapsed-width);
+}
+
+body.sidebar-collapsed .brand-details,
+body.sidebar-collapsed .nav-text,
+body.sidebar-collapsed .nav-pill-badge,
+body.sidebar-collapsed .nav-section-title,
+body.sidebar-collapsed .status-info,
+body.sidebar-collapsed .sidebar-toggle-btn {
+    opacity: 0;
+    display: none !important;
+}
+
+body.sidebar-collapsed .sidebar-header {
+    justify-content: center;
+    padding: 0;
+}
+
+body.sidebar-collapsed .nav-item-link {
+    justify-content: center;
+    padding: 0.75rem 0;
+}
+
+body.sidebar-collapsed .nav-icon {
+    font-size: 1.45rem;
+    min-width: unset;
+}
+
+body.sidebar-collapsed .system-status-card {
+    justify-content: center;
+    padding: 0.65rem 0;
+}
+
+body.sidebar-collapsed .nav-item-link:hover {
+    transform: none;
+}
+
+body.sidebar-collapsed .nav-item-link[data-title] {
+    position: relative;
+}
+
+body.sidebar-collapsed .nav-item-link[data-title]:hover::after {
+    content: attr(data-title);
+    position: absolute;
+    left: calc(var(--sidebar-collapsed-width) + 5px);
+    background: #1e293b;
+    color: #ffffff;
+    padding: 0.4rem 0.8rem;
+    border-radius: 6px;
+    font-size: 0.8rem;
+    white-space: nowrap;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    z-index: 1060;
+    pointer-events: none;
+}
+
+/* ==========================================================================
+   MODO RESPONSIVE (Móviles y Tablets < 992px)
+   ========================================================================== */
+.sidebar-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(15, 23, 42, 0.7);
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+    z-index: 1040;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+}
+
+@media (max-width: 991.98px) {
+    #sidebar {
+        transform: translateX(-100%);
+        width: 280px !important;
+    }
+
+    #main-wrapper {
+        margin-left: 0 !important;
+    }
+
+    body.sidebar-mobile-open {
+        overflow: hidden; /* Evitar scroll del fondo cuando el menú está abierto */
+    }
+
+    body.sidebar-mobile-open #sidebar {
+        transform: translateX(0);
+    }
+
+    body.sidebar-mobile-open .sidebar-overlay {
+        display: block;
+        opacity: 1;
+    }
+
+    .brand-details,
+    .nav-text,
+    .nav-pill-badge,
+    .nav-section-title,
+    .status-info,
+    .sidebar-toggle-btn {
+        opacity: 1 !important;
+        display: flex !important;
+    }
+
+    .nav-section-title {
+        display: block !important;
+    }
+
+    .nav-item-link {
+        justify-content: flex-start !important;
+        padding: 0.75rem 0.9rem !important;
+    }
+}
+
+/* ==========================================================================
+   RESPONSIVIDAD DE TABLAS Y TARJETAS CROSS-PLATFORM
+   ========================================================================== */
+.table-responsive {
+    -webkit-overflow-scrolling: touch;
+    border-radius: 12px;
+    overflow-x: auto;
+    position: relative;
+    max-width: 100%;
+}
+
+.table {
+    margin-bottom: 0;
+    vertical-align: middle;
+}
+
+.table th {
+    white-space: nowrap;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.03em;
+    text-transform: uppercase;
+    color: #475569;
+    background-color: #f8fafc;
+    border-bottom: 1px solid #e2e8f0;
+}
+
+.table td {
+    padding: 0.85rem 0.75rem;
+    font-size: 0.9rem;
+    border-bottom: 1px solid #f1f5f9;
+}
+
+.action-buttons-group {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    flex-wrap: nowrap;
+}
+
+.action-buttons-group .btn {
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 8px;
+    font-size: 0.9rem;
+}
+
+/* ==========================================================================
+   INPUTS Y FORMULARIOS (Prevención Zoom iOS Safari)
+   ========================================================================== */
+@media (max-width: 768px) {
+    /* Regla crucial: font-size >= 16px evita el zoom automático forzado en iOS */
+    input[type="text"],
+    input[type="number"],
+    input[type="email"],
+    input[type="password"],
+    select.form-select,
+    select.form-control,
+    textarea.form-control {
+        font-size: 16px !important;
+        padding: 0.65rem 0.85rem;
+    }
+}
+
+/* ==========================================================================
+   ESTILOS MODERNOS DEL PAGINADOR
+   ========================================================================== */
+.custom-pagination-nav {
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.05);
+    transition: all 0.25s ease;
+}
+
+.custom-pagination-nav:hover {
+    box-shadow: 0 8px 24px -4px rgba(15, 23, 42, 0.08);
+}
+
+.badge-icon-box {
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    border-radius: 8px;
+    background: rgba(37, 99, 235, 0.08);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+}
+
+.custom-pagination {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    list-style: none;
+    padding-left: 0;
+    margin: 0;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.custom-pagination .page-item {
+    margin: 0;
+}
+
+.custom-pagination .page-link {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-width: 38px;
+    height: 38px;
+    padding: 0 0.85rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #475569;
+    background: #ffffff;
+    border: 1px solid #e2e8f0;
+    border-radius: 10px !important;
+    text-decoration: none;
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.custom-pagination .page-link:hover {
+    color: #2563eb;
+    background: #eff6ff;
+    border-color: #bfdbfe;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.15);
+}
+
+.custom-pagination .page-item.active .page-link {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%) !important;
+    border-color: #2563eb !important;
+    color: #ffffff !important;
+    box-shadow: 0 4px 14px rgba(37, 99, 235, 0.35) !important;
+    transform: scale(1.04);
+    cursor: default;
+}
+
+.custom-pagination .page-item.disabled .page-link {
+    background: #f8fafc;
+    border-color: #f1f5f9;
+    color: #94a3b8;
+    cursor: not-allowed;
+    transform: none !important;
+    box-shadow: none !important;
+    opacity: 0.75;
+}
+
+.custom-pagination .page-item.separator .page-link {
+    background: transparent;
+    border-color: transparent;
+    color: #64748b;
+    cursor: default;
+    min-width: 28px;
+    padding: 0;
+}
