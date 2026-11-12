@@ -9,11 +9,6 @@
   },
   "routes": [
     {
-      "src": "/((?:assets|resources|storage|build|css|js|images|fonts)/.*|favicon\\.ico|robots\\.txt)",
-      "dest": "/public/$1",
-      "check": true
-    },
-    {
       "src": "/(.*)",
       "dest": "/api/index.php"
     }

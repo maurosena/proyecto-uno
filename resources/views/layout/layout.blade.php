@@ -5,15 +5,22 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <meta name="theme-color" content="#0b1324">
+    <meta name="mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="format-detection" content="telephone=no">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>@yield('title', 'Sistema de Gestión de Inventario')</title>
 
+    <!-- Favicon SVG embebido para evitar errores 404 en serverless -->
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='8' fill='%232563eb'/%3E%3Cpath d='M16 6L6 11v10l10 5 10-5V11L16 6zm0 2.2l7.1 3.55L16 15.3 8.9 11.75 16 8.2zM8 13.55l7 3.5v7.65l-7-3.5v-7.65zm9 11.15v-7.65l7-3.5v7.65l-7 3.5z' fill='%23fff'/%3E%3C/svg%3E">
+
+    <!-- Fuente Plus Jakarta Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+
     <!-- Bootstrap 5 CSS -->
-    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}"> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
 
     <!-- Bootstrap Icons (contexto de la aplicación) -->
@@ -23,7 +30,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <!-- Estilos personalizados para Navbar / Sidebar lateral fijo y responsividad -->
-    <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+    @include('layout.styles')
 
 </head>
 

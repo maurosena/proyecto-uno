@@ -38,6 +38,25 @@ putenv('APP_SERVICES_CACHE=/tmp/storage/bootstrap/cache/services.php');
 // Serve static files from /public directly if routed to the PHP function
 $uri = urldecode(parse_url($_SERVER['REQUEST_URI'] ?? '/', PHP_URL_PATH) ?: '/');
 $cleanUri = ltrim((string) preg_replace('#^/public/#', '/', $uri), '/');
+
+if ($cleanUri === 'favicon.ico') {
+    header('Content-Type: image/svg+xml');
+    header('Cache-Control: public, max-age=86400');
+    echo '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32"><rect width="32" height="32" rx="8" fill="#2563eb"/><path d="M16 6L6 11v10l10 5 10-5V11L16 6zm0 2.2l7.1 3.55L16 15.3 8.9 11.75 16 8.2zM8 13.55l7 3.5v7.65l-7-3.5v-7.65zm9 11.15v-7.65l7-3.5v7.65l-7 3.5z" fill="#fff"/></svg>';
+    exit;
+}
+
+if ($cleanUri === 'css/sidebar.css') {
+    $stylesBlade = __DIR__.'/../resources/views/layout/styles.blade.php';
+    if (is_file($stylesBlade)) {
+        header('Content-Type: text/css; charset=UTF-8');
+        header('Cache-Control: public, max-age=86400');
+        $content = (string) file_get_contents($stylesBlade);
+        echo trim(str_replace(['<style>', '</style>'], '', $content));
+        exit;
+    }
+}
+
 $publicRoot = realpath(__DIR__.'/../public');
 $publicFile = ($publicRoot && $cleanUri !== '') ? realpath($publicRoot.DIRECTORY_SEPARATOR.$cleanUri) : false;
 
