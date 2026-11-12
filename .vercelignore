@@ -6,4 +6,5 @@ tests
 phpunit.xml
 Dockerfile
 node_modules
+public/hot
 *.md

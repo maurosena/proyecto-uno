@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
     <!-- Estilos personalizados para Navbar / Sidebar lateral fijo y responsividad -->
-    <link rel="stylesheet" href="'./css/sidebar.css'">
+    <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
 
 </head>
 
@@ -55,8 +55,8 @@
 
             <!-- Dashboard -->
             <a href="{{ route('dashboard') }}"
-               class="nav-item-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
-               data-title="Dashboard">
+                class="nav-item-link {{ request()->routeIs('dashboard') ? 'active' : '' }}"
+                data-title="Dashboard">
                 <span class="nav-icon"><i class="bi bi-speedometer2"></i></span>
                 <span class="nav-text">Dashboard</span>
             </a>
@@ -65,8 +65,8 @@
 
             <!-- Productos -->
             <a href="{{ route('productos.index') }}"
-               class="nav-item-link {{ request()->routeIs('productos.*') ? 'active' : '' }}"
-               data-title="Productos">
+                class="nav-item-link {{ request()->routeIs('productos.*') ? 'active' : '' }}"
+                data-title="Productos">
                 <span class="nav-icon"><i class="bi bi-box-seam-fill"></i></span>
                 <span class="nav-text">Productos</span>
                 <span class="nav-pill-badge">Stock</span>
@@ -74,8 +74,8 @@
 
             <!-- Movimientos -->
             <a href="{{ route('movimientos.index') }}"
-               class="nav-item-link {{ request()->routeIs('movimientos.*') ? 'active' : '' }}"
-               data-title="Movimientos">
+                class="nav-item-link {{ request()->routeIs('movimientos.*') ? 'active' : '' }}"
+                data-title="Movimientos">
                 <span class="nav-icon"><i class="bi bi-arrow-left-right"></i></span>
                 <span class="nav-text">Movimientos</span>
             </a>
@@ -84,8 +84,8 @@
 
             <!-- Proveedores -->
             <a href="{{ route('proveedores.index') }}"
-               class="nav-item-link {{ request()->routeIs('proveedores.*') ? 'active' : '' }}"
-               data-title="Proveedores">
+                class="nav-item-link {{ request()->routeIs('proveedores.*') ? 'active' : '' }}"
+                data-title="Proveedores">
                 <span class="nav-icon"><i class="bi bi-truck"></i></span>
                 <span class="nav-text">Proveedores</span>
             </a>
@@ -94,8 +94,8 @@
 
             <!-- Home -->
             <a href="{{ route('home') }}"
-               class="nav-item-link {{ request()->routeIs('home') ? 'active' : '' }}"
-               data-title="Inicio">
+                class="nav-item-link {{ request()->routeIs('home') ? 'active' : '' }}"
+                data-title="Inicio">
                 <span class="nav-icon"><i class="bi bi-house-door-fill"></i></span>
                 <span class="nav-text">Inicio</span>
             </a>
@@ -104,8 +104,8 @@
 
             <!-- Manual de usuario -->
             <a href="{{ route('manual.index') }}"
-               class="nav-item-link {{ request()->routeIs('manual.*') ? 'active' : '' }}"
-               data-title="Manual de usuario">
+                class="nav-item-link {{ request()->routeIs('manual.*') ? 'active' : '' }}"
+                data-title="Manual de usuario">
                 <span class="nav-icon"><i class="bi bi-journal-bookmark-fill"></i></span>
                 <span class="nav-text">Manual de usuario</span>
                 <span class="nav-pill-badge bg-info bg-opacity-25 text-info border-info border-opacity-50">Guía</span>
@@ -161,7 +161,7 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function () {
+        document.addEventListener('DOMContentLoaded', function() {
             const body = document.body;
             const sidebarCollapseBtn = document.getElementById('sidebarCollapseBtn');
             const menuToggleBtn = document.getElementById('menuToggleBtn');
@@ -202,7 +202,7 @@
 
             // Manejador del botón de la barra superior (aplica según resolución)
             if (menuToggleBtn) {
-                menuToggleBtn.addEventListener('click', function () {
+                menuToggleBtn.addEventListener('click', function() {
                     if (window.innerWidth < 992) {
                         toggleMobileSidebar();
                     } else {
@@ -213,13 +213,13 @@
 
             // Cerrar menú móvil al hacer clic en el overlay
             if (sidebarOverlay) {
-                sidebarOverlay.addEventListener('click', function () {
+                sidebarOverlay.addEventListener('click', function() {
                     body.classList.remove('sidebar-mobile-open');
                 });
             }
 
             // Cerrar con la tecla Escape en móvil
-            document.addEventListener('keydown', function (e) {
+            document.addEventListener('keydown', function(e) {
                 if (e.key === 'Escape' && body.classList.contains('sidebar-mobile-open')) {
                     body.classList.remove('sidebar-mobile-open');
                 }
