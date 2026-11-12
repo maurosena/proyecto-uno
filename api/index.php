@@ -36,4 +36,4 @@ putenv('APP_ROUTES_CACHE=/tmp/storage/bootstrap/cache/routes.php');
 putenv('APP_SERVICES_CACHE=/tmp/storage/bootstrap/cache/services.php');
 
 // Forward request to public index.php
-require __DIR__. './public/index.php';
+require __DIR__. '/../public/index.php';
