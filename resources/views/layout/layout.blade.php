@@ -23,6 +23,7 @@
 
     <!-- Estilos personalizados para Navbar / Sidebar lateral fijo y responsividad -->
     <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
+    
 </head>
 
 <body>

@@ -9,7 +9,7 @@
   },
   "routes": [
     {
-      "src": "/(assets/.|resources/.|storage/.|build/.|favicon\\.ico|robots\\.txt)",
+      "src": "/(assets/.|resources/.|storage/.|build/.|css/.|js/.|favicon\\.ico|robots\\.txt)",
       "dest": "/public/$1"
     },
     {
