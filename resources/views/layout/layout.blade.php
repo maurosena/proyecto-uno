@@ -12,8 +12,9 @@
     <title>@yield('title', 'Sistema de Gestión de Inventario')</title>
 
     <!-- Bootstrap 5 CSS -->
+    {{-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}"> --}}
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
 
     <!-- Bootstrap Icons (contexto de la aplicación) -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -23,7 +24,7 @@
 
     <!-- Estilos personalizados para Navbar / Sidebar lateral fijo y responsividad -->
     <link rel="stylesheet" href="{{ asset('css/sidebar.css') }}">
-    
+
 </head>
 
 <body>
@@ -155,8 +156,9 @@
     </div>
 
     <!-- Scripts de Bootstrap y Comportamiento del Menú -->
+    {{-- <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script> --}}
+    {{-- <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script> --}}
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
