@@ -1,0 +1,9 @@
+.git
+.github
+.env
+.env.*
+tests
+phpunit.xml
+Dockerfile
+node_modules
+*.md
